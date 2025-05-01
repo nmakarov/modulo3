@@ -1,14 +1,14 @@
 ## The Process
 ### Step 1
-First step is to do a very quick&dirty prototype (spike) – to see how binary strings can be converted to a decimal number, perform a modulo 3 operation and print everything out for a few test values.
-Script: spikes/take1
+First step is to do a very quick&dirty prototype (spike) – to see how binary strings can be converted to a decimal number, perform a modulo 3 operation and print everything out for a few test values.  
+Script: `spikes/take1`  
 Benefits: 
 -	Verify the solution
 -	Visually see how binary numbers will look as decimals (and eyeballing the correct result)
 
 ### Step 2
-Second step – simple state machine implementation. It takes state defs and a binary string and produces the resulting number.
-Script: spikes/take2
+Second step – simple state machine implementation. It takes state defs and a binary string and produces the resulting number.  
+Script: `spikes/take2`  
 Benefits:
 -	See how state machine works
 -	Play with params and visualize the future implementation
