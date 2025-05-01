@@ -53,12 +53,12 @@ const verifyStates = (pStates, alphabet) => {
 const makeStateMachine = (pStates, alphabet) => {
     const states = verifyStates(pStates, alphabet);
 
-    const transitionFn = (pInput, initialState) => {
+    const transitionFn = (pInput, pInitialState) => {
         // if (typeof pInput !== "string") {
         //     throw new Error("Input must be a string");
         // }
         const input = verifyInput(pInput, alphabet);
-        let state = initialState;
+        let state = pInitialState ?? Object.keys(states)[0];
         // console.info(`State0: ${state}`);
         for (let bit of input) {
             state = states[state][bit];

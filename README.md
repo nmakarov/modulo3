@@ -16,7 +16,9 @@ Benefits:
 
 ### Step 3
 Now, to the final step – to make it a proper solution.
-There's a library module `library/StateMachine.js` that contains all needed functions. There's a script `spikes/take3.js` to verify and play with those functions. And there's a test file `tests/stateMachine.test.js`.
+There's a library module `library/StateMachine.js` that contains all needed functions. There's a script `spikes/take3.js` to verify and play with those functions. And there's a test file `tests/stateMachine.test.js`.  
+Benefits:
+-   `input` can be a string `"1110"` as well as a number `0b1110` or `14`
 
 ### Teting
 ```
@@ -26,11 +28,11 @@ npx jest
 ### Final steps, to be done if needed
 -	Write proper documentation
 -	Based on the way (ways) how this function will be used
-o	wrap it in a reusable module, etc.
-o	adjust the error handling/reporting (now it throws exceptions)
-o	adjust logging
-o	“verify” functions might sanitize input if possible
-o	Make possible to inject custom “verify” functions
+    -	wrap it in a reusable module, etc.
+    -	adjust the error handling/reporting (now it throws exceptions)
+    -	adjust logging
+    -	“verify” functions might sanitize input if possible
+    -	Make possible to inject custom “verify” functions
 
 
 

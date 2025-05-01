@@ -56,10 +56,19 @@ describe("makeStateMachine", () => {
     };
     const fsm = makeStateMachine(states, alphabet);
 
+    it("should use default iunitial state if not provided", () => {
+        expect(fsm("1110")).toBe("2"); // S0 -> S1 -> S0
+        expect(fsm("1110", "S0")).toBe("2"); // S0 -> S1 -> S0
+    });
+
     it("should compute the correct result from a binary string", () => {
-        expect(fsm("011", "S0")).toBe("0"); // S0 -> S1 -> S0
-        expect(fsm("01", "S0")).toBe("1");  // S0 -> S1
-        expect(fsm("010", "S0")).toBe("2"); // S0 -> S1 -> S2
+        expect(fsm("011")).toBe("0"); // S0 -> S1 -> S0
+        expect(fsm("01")).toBe("1");  // S0 -> S1
+        expect(fsm("010")).toBe("2"); // S0 -> S1 -> S2
+        expect(fsm("1101")).toBe("1"); // 13
+        expect(fsm("1110")).toBe("2"); // 14
+        expect(fsm("1111")).toBe("0"); // 15
+        expect(fsm("1010")).toBe("1"); // 10
     });
 
     it("should throw for invalid input character", () => {
