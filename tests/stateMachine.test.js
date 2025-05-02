@@ -3,10 +3,16 @@ const { verifyInput, verifyStates, makeStateMachine } = require("../library/Stat
 describe("JS verifyInput", () => {
     const alphabet = ["0", "1"];
 
+    // Greens
     it("should return the same string if valid", () => {
         expect(verifyInput("1010", alphabet)).toBe("1010");
     });
 
+    it("should convert numeric input to string", () => {
+        expect(verifyInput(101, alphabet)).toBe("101");
+    });
+
+    // Reds
     it("should throw if input contains invalid characters", () => {
         expect(() => verifyInput("1020", alphabet)).toThrow('Bit "2" at position 2 is not in alphabet');
     });
@@ -15,9 +21,19 @@ describe("JS verifyInput", () => {
         expect(() => verifyInput("", alphabet)).toThrow("Input must not be empty");
     });
 
-    it("should convert numeric input to string", () => {
-        expect(verifyInput(101, alphabet)).toBe("101");
+    it("should throw if input is null or undefined", () => {
+        expect(() => verifyInput(undefined, alphabet)).toThrow("Input can't be null or undefined");
     });
+
+    it("should throw if alphabet is not an array", () => {
+        expect(() => verifyInput("101", 23)).toThrow("Alphabet must be an array");
+        expect(() => verifyInput("101", "abc")).toThrow("Alphabet must be an array");
+    });
+
+    it.only("should throw if alphabet is not an array of strings", () => {
+        expect(() => verifyInput("101", [ 1,2,3 ])).toThrow("Alphabet must be an array of strings, but found \"1\" of type \"number\" at position 0");
+    });
+
 });
 
 describe("verifyStates", () => {

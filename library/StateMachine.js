@@ -1,8 +1,28 @@
 const verifyInput = (pInput, alphabet) => {
+    if (pInput === null || pInput === undefined) {
+        throw new Error("Input can't be null or undefined");
+    }
     const input = typeof pInput === "string" ? pInput : pInput.toString();
     if (input.length === 0) {
         throw new Error("Input must not be empty");
     }
+    if ( ! Array.isArray(alphabet)) {
+        throw new Error("Alphabet must be an array");
+    }
+    if (alphabet.length === 0) {
+        throw new Error("Alphabet must not be empty");
+    }
+    console.info(">> alphabet:", alphabet, ", typeof alphabet:", typeof alphabet);
+    alphabet.forEach((bit, i) => {
+        console.info(">> bit:", bit, ", typeof bit:", typeof bit);
+        if (typeof bit !== "string") {
+            throw new Error(`Alphabet must be an array of strings, but found "${bit}" of type "${typeof bit}" at position ${i}`);
+        }
+        console.info(">> bit:", bit, ", typeof bit:", typeof bit);
+    });
+    // if (alphabet.some((bit) => typeof bit !== "string")) {
+    //     throw new Error("Alphabet must be an array of strings");
+    // }
     const output = input.split("").map((bit, i) => {
         if ( ! alphabet.includes(bit)) {
             throw new Error(`Bit "${bit}" at position ${i} is not in alphabet`);
