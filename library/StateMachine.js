@@ -12,13 +12,10 @@ const verifyInput = (pInput, alphabet) => {
     if (alphabet.length === 0) {
         throw new Error("Alphabet must not be empty");
     }
-    console.info(">> alphabet:", alphabet, ", typeof alphabet:", typeof alphabet);
     alphabet.forEach((bit, i) => {
-        console.info(">> bit:", bit, ", typeof bit:", typeof bit);
         if (typeof bit !== "string") {
             throw new Error(`Alphabet must be an array of strings, but found "${bit}" of type "${typeof bit}" at position ${i}`);
         }
-        console.info(">> bit:", bit, ", typeof bit:", typeof bit);
     });
     // if (alphabet.some((bit) => typeof bit !== "string")) {
     //     throw new Error("Alphabet must be an array of strings");
@@ -72,7 +69,6 @@ const verifyStates = (pStates, alphabet) => {
 
 const makeStateMachine = (pStates, alphabet) => {
     const states = verifyStates(pStates, alphabet);
-
     const transitionFn = (pInput, pInitialState) => {
         // if (typeof pInput !== "string") {
         //     throw new Error("Input must be a string");

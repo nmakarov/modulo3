@@ -26,26 +26,32 @@ export function verifyStates<T>(pStates: States<T>, alphabet: Alphabet): States<
         if (typeof pStates[state] !== "object") {
             throw new Error(`State ${state} must be an object`);
         }
-        states[state] = {};
-        let hasResult = false;
+
+        const stateDef: { [input: string]: string | T } & { result?: T } = {};
         for (let [bit, newState] of Object.entries(pStates[state])) {
             if (bit === "result") {
-                states[state].result = newState as T;
-                hasResult = true;
+                stateDef.result = newState as T;
                 continue;
             }
+
             if (!alphabet.includes(bit)) {
                 throw new Error(`Bit "${bit}" in state "${state}" is not in alphabet`);
             }
+
             if (!Object.prototype.hasOwnProperty.call(pStates, newState as string)) {
                 throw new Error(`State "${newState}" in state "${state}" is not defined`);
             }
-            states[state][bit] = newState as string;
+
+            stateDef[bit] = newState as string;
         }
-        if (!hasResult) {
+
+        if (stateDef.result === undefined) {
             throw new Error(`State "${state}" must have a "result"`);
         }
+
+        states[state] = stateDef as { [input: string]: string | T; result: T };
     }
+
     return states;
 }
 

@@ -4,7 +4,7 @@ import {
     makeStateMachine,
     Alphabet,
     States,
-} from "../library/StateMachine";
+} from "../library/StateMachineTS";
 
 // npx ts-node spikes/take3.ts
 

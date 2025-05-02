@@ -4,7 +4,7 @@ import {
     makeStateMachine,
     Alphabet,
     States
-} from "../library/StateMachine";
+} from "../library/StateMachineTS";
 
 describe("TS verifyInput", () => {
     const alphabet: Alphabet = ["0", "1"];
