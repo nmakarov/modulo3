@@ -54,6 +54,11 @@ Python3:
 pytest
 ```
 
+Go:
+```
+go test ./tests
+```
+
 ### Final steps, to be done if needed
 -	Write proper documentation
 -	Based on the way (ways) how this function will be used

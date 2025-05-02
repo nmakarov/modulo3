@@ -1,4 +1,4 @@
-# File: take1.py
+# python3 spikes/take1.py
 
 def modulo3(binary_str):
     number = int(binary_str, 2)
