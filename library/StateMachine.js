@@ -2,10 +2,23 @@ const verifyInput = (pInput, alphabet) => {
     if (pInput === null || pInput === undefined) {
         throw new Error("Input can't be null or undefined");
     }
-    const input = typeof pInput === "string" ? pInput : pInput.toString();
+    const input = typeof pInput === "string" ? pInput : pInput.toString(2);
     if (input.length === 0) {
         throw new Error("Input must not be empty");
     }
+
+    // alphabet is verified in the verifyStates function now
+
+    const output = input.split("").map((bit, i) => {
+        if ( ! alphabet.includes(bit)) {
+            throw new Error(`Bit "${bit}" at position ${i} is not in alphabet`);
+        }
+        return bit;
+    }).join("");
+    return output;
+};
+
+const verifyStates = (pStates, alphabet) => {
     if ( ! Array.isArray(alphabet)) {
         throw new Error("Alphabet must be an array");
     }
@@ -17,19 +30,6 @@ const verifyInput = (pInput, alphabet) => {
             throw new Error(`Alphabet must be an array of strings, but found "${bit}" of type "${typeof bit}" at position ${i}`);
         }
     });
-    // if (alphabet.some((bit) => typeof bit !== "string")) {
-    //     throw new Error("Alphabet must be an array of strings");
-    // }
-    const output = input.split("").map((bit, i) => {
-        if ( ! alphabet.includes(bit)) {
-            throw new Error(`Bit "${bit}" at position ${i} is not in alphabet`);
-        }
-        return bit;
-    }).join("");
-    return output;
-};
-
-const verifyStates = (pStates, alphabet) => {
     const states = {};
     for (let state in pStates) {
         if (typeof pStates[state] !== "object") {
@@ -63,7 +63,6 @@ const verifyStates = (pStates, alphabet) => {
     }
     // now, verify that all states are reachable
     // and that all states have a transition for each input
-    // and that there's no loops (???)
     return states;
 };
 
