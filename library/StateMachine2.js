@@ -91,16 +91,37 @@ class StateMachine {
         }).join("");
         return output;
     }
-    constructor(ruleset, pInput) {
+    constructor(ruleset, { input, alphabet } = {}) {
         this.ruleset = StateMachine.verifyRuleSet(ruleset);
         this.stateSet = StateMachine.figureOutStateSet(ruleset);
-        this.alphabet = StateMachine.figureOutAlphabet(ruleset);
+        this.alphabet = alphabet ? this.verifyAlphabet(alphabet) : StateMachine.figureOutAlphabet(ruleset);
         this.initialState = StateMachine.figureOutInitialState(ruleset);
-        pInput && this.prepare(pInput);
+        input && this.prepare(input);
         this.reset();
     }
-    prepare(pInput) {
-        this.input = StateMachine.verifyInput(pInput, this.alphabet);
+    verifyAlphabet(alphabet) {
+        if ( ! Array.isArray(alphabet)) {
+            throw new Error("Alphabet must be an array");
+        }
+        if (alphabet.length === 0) {
+            throw new Error("Alphabet must not be empty");
+        }
+        alphabet.forEach((bit, i) => {
+            if (typeof bit !== "string") {
+                throw new Error(`Alphabet must be an array of strings, but found "${bit}" of type "${typeof bit}" at position ${i}`);
+            }
+        });
+        for (let state of Object.keys(this.ruleset)) {
+            for (let bit of Object.keys(this.ruleset[state])) {
+                if ( ! alphabet.includes(bit)) {
+                    throw new Error(`Bit "${bit}" in state "${state}" is not in alphabet`);
+                }
+            }
+        }
+        return alphabet;
+    }
+    prepare(input) {
+        this.input = StateMachine.verifyInput(input, this.alphabet);
     }
     resolveResult(state) {
         return Object.keys(this.ruleset).indexOf(state).toString(10);
@@ -110,8 +131,16 @@ class StateMachine {
         //     return null;
         // }
         // const bit = this.input[this.position];
+        // const stateRef = this.ruleset[this.currentState];
+        // if ( ! stateRef) {
+        //     throw new Error(`State "${this.currentState}" leads nowhere`);
+        // }
         const newState = this.ruleset[this.currentState][bit];
-        // this.position += 1;
+
+        // if ( this.ruleset[this.newState] === undefined) {
+        //     throw new Error(`State "${this.newState}" leads nowhere`);
+        // }
+
         this.stateHistory.push(`${newState}(${bit})`);
         this.currentState = newState;
         return newState;
@@ -120,7 +149,9 @@ class StateMachine {
         const input = pInput ?? this.input;
         this.stateHistory.push(`${this.currentState}`);
         for (let bit of input) {
-            this.step(bit);
+            if (this.step(bit) === undefined) {
+                throw new Error(`Bit "${bit}" leads nowhere`);
+            }
         }
         return this.resolveResult(this.currentState);
     }

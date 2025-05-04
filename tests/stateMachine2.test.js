@@ -119,7 +119,7 @@ describe("StateMachine", () => {
     };
     describe("Sanity tests", () => {
         const input = "010101";
-        const sm = new StateMachine(ruleset, input);
+        const sm = new StateMachine(ruleset, { input });
         // greens
         it("should create a state machine", () => {
             expect(sm).toBeInstanceOf(StateMachine);
@@ -165,6 +165,50 @@ describe("StateMachine", () => {
             expect(sm.go(input)).toEqual("1");
             console.info(sm.stateHistory);
             expect(sm.getStateHistory()).toEqual("S0 -> S1(1) -> S2(0) -> S2(1) -> S1(0)");
+        });
+    });
+    describe("Alphabet tests", () => {
+        const ruleset = {
+            S0: { "0": "S0", "1": "S1" },
+            S1: { "0": "S2", "1": "S0" },
+            S2: { "0": "S1", "1": "S2" }
+        };
+        const sm = new StateMachine(ruleset);
+        // greens
+        it("should verify alphabet", () => {
+            const alphabet = [ "0", "1" ];
+            expect(sm.verifyAlphabet(alphabet)).toEqual(alphabet);
+        });
+        it("should throw error on empty alphabet", () => {
+            expect(() => sm.verifyAlphabet([])).toThrow("Alphabet must not be empty");
+        });
+        it("should throw error on non-array alphabet", () => {
+            expect(() => sm.verifyAlphabet("0123456789")).toThrow("Alphabet must be an array");
+        });
+        it("should throw error on non-string alphabet", () => {
+            expect(() => sm.verifyAlphabet([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ])).toThrow("Alphabet must be an array of strings");
+        });
+        it("Should throw if ruleset has a wrong bit", () => {
+            const ruleset = {
+                S0: { "0": "S0", "1": "S1" },
+                S1: { "0": "S2", "2": "S0" },
+                S2: { "0": "S1", "1": "S2" }
+            };
+            const alphabet = [ "0", "1" ];
+            expect(() => new StateMachine(ruleset, { alphabet })).toThrow("Bit \"2\" in state \"S1\" is not in alphabet");
+        });
+        it("Should not immediately throw if a wrong bit is in the supplied aplhabet", () => {
+            // quite rare case, but nonetheless...
+            const ruleset = {
+                S0: { "0": "S0", "1": "S1" },
+                S1: { "0": "S2", "1": "S0" },
+                S2: { "0": "S1", "1": "S2" }
+            };
+            const alphabet = [ "0", "1", "2" ];
+            const input = "120";
+            expect(() => new StateMachine(ruleset, { input, alphabet })).not.toThrow();
+            const sm = new StateMachine(ruleset, { input, alphabet });
+            expect(() => sm.go(input)).toThrow("Bit \"2\" leads nowhere");
         });
     });
 });
