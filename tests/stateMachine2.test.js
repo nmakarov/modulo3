@@ -1,4 +1,8 @@
 const { StateMachine } = require("../library/StateMachine2");
+const {
+    buildRulesetSchema,
+    validateRuleset: customValidator
+ } = require("../library/customValidator");
 
 describe("Verify ruleset", () => {
     describe("Green tests", () => {
@@ -210,5 +214,68 @@ describe("StateMachine", () => {
             const sm = new StateMachine(ruleset, { input, alphabet });
             expect(() => sm.go(input)).toThrow("Bit \"2\" leads nowhere");
         });
+    });
+});
+
+describe("Custom validator", () => {
+    const alphabet = [ "0", "1" ];
+    const ruleset = {
+        S0: { "0": "S0", "1": "S1" },
+        S1: { "0": "S2", "1": "S0" },
+        S2: { "0": "S1", "1": "S2" }
+    };
+    // greens
+    it("should build ruleset schema", () => {
+        const schema = buildRulesetSchema(alphabet);
+        expect(schema).toBeDefined();
+    });
+    it("should validate ruleset", () => {
+        const result = customValidator(ruleset, alphabet);
+        expect(result).toEqual(ruleset);
+    });
+    it("should throw error on empty ruleset", () => {
+        expect(() => customValidator({}, alphabet)).toThrow();
+    });
+    it("should throw error on empty ruleset", () => {
+        expect(() => customValidator(null, alphabet)).toThrow();
+    });
+    it("should throw if bit is outside of alphabet", () => {
+        const ruleset = {
+            S0: { "0": "S0", "1": "S1" },
+            S1: { "0": "S2", "2": "S0" },
+            S2: { "0": "S1", "1": "S2" }
+        };
+        expect(() => customValidator(ruleset, alphabet)).toThrow();
+    });
+    it("should throw if newState is not defined on the top level", () => {
+        const ruleset = {
+            S0: { "0": "S0", "1": "S1" },
+            S1: { "0": "S2", "1": "S0" },
+            S2: { "0": "S1", "1": "S3" }
+        };
+        expect(() => customValidator(ruleset, alphabet)).toThrow();
+    });
+    it("should throw if custom validator not a function", () => {
+        const ruleset = {
+            S0: { "0": "S0", "1": "S1" },
+            S1: { "0": "S2", "1": "S0" },
+            S2: { "0": "S1", "1": "S2" }
+        };
+        expect(() => new StateMachine(ruleset, { validator: 123 })).toThrow("'validator' must be a function");
+        expect(() => new StateMachine(ruleset, { validator: customValidator })).toThrow("'alphabet' must be defined if 'validator' is defined");
+        
+    });
+    it("should work if a custom validator is used", () => {
+        const ruleset = {
+            S0: { "0": "S0", "1": "S1" },
+            S1: { "0": "S2", "1": "S0" },
+            S2: { "0": "S1", "1": "S2" }
+        };
+        const input = "1010";
+        const sm = new StateMachine(ruleset, { validator: customValidator, alphabet });
+
+        expect(sm).toBeInstanceOf(StateMachine);
+        expect(sm.go(input)).toEqual("1");
+        expect(sm.getStateHistory()).toEqual("S0 -> S1(1) -> S2(0) -> S2(1) -> S1(0)");
     });
 });

@@ -91,10 +91,20 @@ class StateMachine {
         }).join("");
         return output;
     }
-    constructor(ruleset, { input, alphabet } = {}) {
-        this.ruleset = StateMachine.verifyRuleSet(ruleset);
+    constructor(ruleset, { input, alphabet, validator } = {}) {
+        if (validator) {
+            if (typeof validator !== "function") {
+                throw new Error("'validator' must be a function");
+            } if ( ! alphabet) {
+                throw new Error("'alphabet' must be defined if 'validator' is defined");
+            }
+            this.alphabet = this.verifyAlphabet(alphabet);
+            this.ruleset = validator(ruleset, alphabet);
+        } else {
+            this.ruleset = validator ? validator() : StateMachine.verifyRuleSet(ruleset);
+            this.alphabet = alphabet ? this.verifyAlphabet(alphabet) : StateMachine.figureOutAlphabet(ruleset);
+        }
         this.stateSet = StateMachine.figureOutStateSet(ruleset);
-        this.alphabet = alphabet ? this.verifyAlphabet(alphabet) : StateMachine.figureOutAlphabet(ruleset);
         this.initialState = StateMachine.figureOutInitialState(ruleset);
         input && this.prepare(input);
         this.reset();
@@ -111,10 +121,12 @@ class StateMachine {
                 throw new Error(`Alphabet must be an array of strings, but found "${bit}" of type "${typeof bit}" at position ${i}`);
             }
         });
-        for (let state of Object.keys(this.ruleset)) {
-            for (let bit of Object.keys(this.ruleset[state])) {
-                if ( ! alphabet.includes(bit)) {
-                    throw new Error(`Bit "${bit}" in state "${state}" is not in alphabet`);
+        if (this.ruleset) {
+            for (let state of Object.keys(this.ruleset)) {
+                for (let bit of Object.keys(this.ruleset[state])) {
+                    if ( ! alphabet.includes(bit)) {
+                        throw new Error(`Bit "${bit}" in state "${state}" is not in alphabet`);
+                    }
                 }
             }
         }
