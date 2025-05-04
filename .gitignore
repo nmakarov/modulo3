@@ -1,13 +1,1 @@
-~$rocess.docx
 node_modules
-process.docx
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*.so
-*.egg-info/
-
-# Virtual environment
-venv/
-.env/
