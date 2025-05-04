@@ -102,6 +102,9 @@ class StateMachine {
     prepare(pInput) {
         this.input = StateMachine.verifyInput(pInput, this.alphabet);
     }
+    resolveResult(state) {
+        return Object.keys(this.ruleset).indexOf(state).toString(10);
+    }
     step(bit) {
         // if (this.position >= this.input.length) {
         //     return null;
@@ -119,7 +122,7 @@ class StateMachine {
         for (let bit of input) {
             this.step(bit);
         }
-        return this.currentState;
+        return this.resolveResult(this.currentState);
     }
     getStateHistory() {
         return this.stateHistory.join(" -> ");

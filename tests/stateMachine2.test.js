@@ -128,6 +128,11 @@ describe("StateMachine", () => {
             const input = "010101";
             expect(sm.input).toEqual(input);
         });
+        it("should resolve result", () => {
+            expect(sm.resolveResult("S0")).toEqual("0");
+            expect(sm.resolveResult("S1")).toEqual("1");
+            expect(sm.resolveResult("S2")).toEqual("2");
+        });
         it("should reset state machine", () => {
             expect(sm.currentState).toEqual("S0");
             expect(sm.stateHistory).toEqual([ ]);
@@ -141,7 +146,7 @@ describe("StateMachine", () => {
             expect(sm.step("1")).toEqual("S0");
         });
         it("should go through input", () => {
-            expect(sm.go(input)).toEqual("S0");
+            expect(sm.go(input)).toEqual("0");
         });
     });
     describe("Acceptance tests", () => {
@@ -157,7 +162,7 @@ describe("StateMachine", () => {
         });
         it("should accept input", () => {
             const input = "1010";
-            expect(sm.go(input)).toEqual("S1");
+            expect(sm.go(input)).toEqual("1");
             console.info(sm.stateHistory);
             expect(sm.getStateHistory()).toEqual("S0 -> S1(1) -> S2(0) -> S2(1) -> S1(0)");
         });
