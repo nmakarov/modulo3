@@ -167,7 +167,6 @@ describe("StateMachine", () => {
         it("should accept input", () => {
             const input = "1010";
             expect(sm.go(input)).toEqual("1");
-            console.info(sm.stateHistory);
             expect(sm.getStateHistory()).toEqual("S0 -> S1(1) -> S2(0) -> S2(1) -> S1(0)");
         });
     });

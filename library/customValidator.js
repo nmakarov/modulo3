@@ -35,7 +35,6 @@ function validateRuleset(ruleset, alphabet) {
         }
     }
 
-    console.info(">> value:", value);
     return value;
 }
 

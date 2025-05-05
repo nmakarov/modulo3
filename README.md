@@ -20,6 +20,9 @@ There's a library module `library/StateMachine.js` that contains all needed func
 Benefits:
 -   `input` can be a string `"1110"` as well as a number `0b1110` or `14`
 
+#### Step 4
+A different solution is to have a StateMachine class (presented in the `library/Statemachine2.js`) that is capable of taking the only param – `RuleSet` and with static methods for "figuring out" all other nesessary params out of it, with an ability to inject custom validators (Joi in this case, as an example). There's no spike for this, but tests are presented and have 100% code coverage.
+
 ### Considerations
 -   It is assumed that `alphabet` should be an array of strings;
 -   It is assumed that `states` should be an object of this structure: key of each element is a state name; value is an object of `bit`:`nextState` pairs with an extra pair `result`:`bit` that is used to find the correct return value at the end of the state traversing sequence.
