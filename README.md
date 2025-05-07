@@ -21,24 +21,19 @@ Benefits:
 -   `input` can be a string `"1110"` as well as a number `0b1110` or `14`
 
 #### Step 4
-A different solution is to have a StateMachine class (presented in the `library/Statemachine2.js`) that is capable of taking the only param – `RuleSet` and with static methods for "figuring out" all other nesessary params out of it, with an ability to inject custom validators (Joi in this case, as an example). There's no spike for this, but tests are presented and have 100% code coverage.
+A different solution is to have a StateMachine class (presented in the `library/Statemachine2.js`) that is capable of taking the only param – `RuleSet` and with static methods for "figuring out" all other nesessary params out of it, with an ability to inject custom validators (Joi in this case, as an example). Also it is possible to specify an alphabet as a parameter. There's no spike for this, but tests are presented and have 100% code coverage.
 
 ### Considerations
 -   It is assumed that `alphabet` should be an array of strings;
 -   It is assumed that `states` should be an object of this structure: key of each element is a state name; value is an object of `bit`:`nextState` pairs with an extra pair `result`:`bit` that is used to find the correct return value at the end of the state traversing sequence.
 -   It is assumed that `input` might be a string containing only allowed bits – or simply an integer (that is internally converted to an array of bits)
+-	“verify” functions are sanitizing params and input whenever possible
 -   Testing is quite extensive; validators designed in such a way that they stop and throw at the very first error encountered, reporting what exactly is wrong. That can be changed to a way to accumulate all encountered errors and then report them at once, but that adds significant complexity – some validations can't be performed if previous ones failed. For instance it is not possible to test that every entry in the alphabet is a string if alphabet itself is not an array.
 
 ### Installing
 After cloning the repo, JS/TS can be initialized this way:
 ```
 npm i
-```
-Python is usually more tricky, depending on the way/version it is installed (standalone, via Brew, via other pakage manager, etc.) Most of the time setting up a virtual environment and installing the `pytest` into it does the trick like so:
-```
-python3 -m venv venv
-source venv/bin/activate
-pip install pytest
 ```
 
 ### Testing
@@ -47,29 +42,13 @@ JavaScript:
 npx jest
 ```
 
-TypeScript:
-```
-npx jest -c jest.config.ts.js
-```
-
-Python3:
-```
-pytest
-```
-
-Go:
-```
-go test ./tests
-```
-
 ### Final steps, to be done if needed
 -	Write proper documentation
 -	Based on the way (ways) how this function will be used
     -	wrap it in a reusable module, etc.
     -	adjust the error handling/reporting (now it throws exceptions)
     -	adjust logging
-    -	“verify” functions might sanitize input if possible
-    -	Make possible to inject custom “verify” functions
+   
 
 
 
