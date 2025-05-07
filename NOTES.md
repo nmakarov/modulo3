@@ -16,4 +16,4 @@
 - Lots of things depend on how this solution will be used
     - Is there an extensive ruleset verification is needed or just a basic set of guards so the code won't be broken?
 - No Joy, because it is a universal library and error messages are too generic
--
+
