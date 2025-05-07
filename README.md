@@ -25,8 +25,8 @@ A different solution is to have a StateMachine class (presented in the `library/
 
 ### Considerations
 -   It is assumed that `alphabet` should be an array of strings;
--   It is assumed that `states` should be an object of this structure: key of each element is a state name; value is an object of `bit`:`nextState` pairs with an extra pair `result`:`bit` that is used to find the correct return value at the end of the state traversing sequence.
--   It is assumed that `input` might be a string containing only allowed bits – or simply an integer (that is internally converted to an array of bits)
+-   It is assumed that `states` should be an object of this structure: key of each element is a state name; value is an object of `bit`:`nextState` pairs with an extra pair `result`:`bit` (that is for the Step3 only) that is used to find the correct return value at the end of the state traversing sequence.
+-   It is assumed that `input` might be a string containing only allowed bits – or simply an integer (that is internally converted to an array of bits) – that is for step3 only.
 -	“verify” functions are sanitizing params and input whenever possible
 -   Testing is quite extensive; validators designed in such a way that they stop and throw at the very first error encountered, reporting what exactly is wrong. That can be changed to a way to accumulate all encountered errors and then report them at once, but that adds significant complexity – some validations can't be performed if previous ones failed. For instance it is not possible to test that every entry in the alphabet is a string if alphabet itself is not an array.
 
