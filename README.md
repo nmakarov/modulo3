@@ -31,7 +31,7 @@ A different solution is to have a StateMachine class (presented in the `library/
 -   Testing is quite extensive; validators designed in such a way that they stop and throw at the very first error encountered, reporting what exactly is wrong. That can be changed to a way to accumulate all encountered errors and then report them at once, but that adds significant complexity – some validations can't be performed if previous ones failed. For instance it is not possible to test that every entry in the alphabet is a string if alphabet itself is not an array.
 
 ### Installing
-After cloning the repo, JS/TS can be initialized this way:
+After cloning the repo, the solution can be initialized this way:
 ```
 npm i
 ```
@@ -40,6 +40,14 @@ npm i
 JavaScript:
 ```
 npx jest
+```
+
+### Spikes
+All of them lives in the `spikes/` folder. Can be run like so:
+```
+node spikes/take1.js
+node spikes/take2.js
+node spikes/take3.js
 ```
 
 ### Final steps, to be done if needed
