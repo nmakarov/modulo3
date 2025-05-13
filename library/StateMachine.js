@@ -7,8 +7,6 @@ const verifyInput = (pInput, alphabet) => {
         throw new Error("Input must not be empty");
     }
 
-    // alphabet is verified in the verifyStates function now
-
     const output = input.split("").map((bit, i) => {
         if ( ! alphabet.includes(bit)) {
             throw new Error(`Bit "${bit}" at position ${i} is not in alphabet`);
@@ -50,7 +48,6 @@ const verifyStates = (pStates, alphabet) => {
             } else if ( ! alphabet.includes(bit)) {
                 throw new Error(`Bit "${bit}" in state "${state}" is not in alphabet`);
             }
-            // console.info(">> Object.keys(states):", Object.keys(pStates), ", newState:", newState);
             if ( ! Object.keys(pStates).includes(newState)) {
                 throw new Error(`State "${newState}" in state "${state}" is not defined`);
             }
@@ -69,17 +66,12 @@ const verifyStates = (pStates, alphabet) => {
 const makeStateMachine = (pStates, alphabet) => {
     const states = verifyStates(pStates, alphabet);
     const transitionFn = (pInput, pInitialState) => {
-        // if (typeof pInput !== "string") {
-        //     throw new Error("Input must be a string");
-        // }
         const input = verifyInput(pInput, alphabet);
         let state = pInitialState ?? Object.keys(states)[0];
-        // console.info(`State0: ${state}`);
         for (let bit of input) {
             state = states[state][bit];
             // console.info(`Input: ${bit} -> State: ${state}`);
         }
-        // console.info(`Final state: ${state}`);
         return states[state].result;
     };
     return transitionFn;
